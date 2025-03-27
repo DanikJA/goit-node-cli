@@ -23,7 +23,23 @@ async function getContactById(contactId) {
 }
 
 async function removeContact(contactId) {
-  // ...твій код. Повертає об'єкт видаленого контакту. Повертає null, якщо контакт з таким id не знайдений.
+  try {
+    const allContacts = listContacts();
+    const contactToRemove = allContacts.find(
+      (contact) => contact.id === contactId
+    );
+    if (!contactToRemove) {
+      return null;
+    }
+    const filteredContacts = allContacts.filter(
+      (contact) => contact.id !== contactId
+    );
+
+    await fs.writeFile(contactPath, JSON.stringify(filteredContacts, null, 2));
+    return contactToRemove;
+  } catch (error) {
+    console.error("Error finding contact:", error);
+  }
 }
 
 async function addContact(name, email, phone) {

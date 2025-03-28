@@ -36,7 +36,7 @@ async function removeContact(contactId) {
       (contact) => contact.id !== contactId
     );
 
-    await fs.writeFile(contactPath, JSON.stringify(filteredContacts, null, 2));
+    await fs.writeFile(contactsPath, JSON.stringify(filteredContacts, null, 2));
     return contactToRemove;
   } catch (error) {
     console.error("Error finding contact:", error);
@@ -45,7 +45,7 @@ async function removeContact(contactId) {
 
 async function addContact(name, email, phone) {
   try {
-    const allContacts = listContacts();
+    const allContacts = await listContacts();
     const newContact = { id: nanoid(), name, email, phone };
     allContacts.push(newContact);
     await fs.writeFile(contactsPath, JSON.stringify(allContacts, null, 2));
